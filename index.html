@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebulous Holdings - PulseChain Validator Services</title>
+    
+    <!-- FAVICON & APP ICONS - START -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="manifest" href="/static/site.webmanifest">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <!-- FAVICON & APP ICONS - END -->
+    
+    <!-- 
+      NOTE FOR PRODUCTION: 
+      The Tailwind CDN is great for development. For the live website, it's best to 
+      install Tailwind CSS via npm and generate a purged CSS file. This will make your
+      site load faster by removing unused styles.
+    -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- We need to add the THREE.js library for Vanta.js to work properly -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Rajdhani', sans-serif;
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #0a0e17 0%, #000000 100%);
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #00f0ff 0%, #ff00f0 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            /* Added shadow for better contrast against busy backgrounds */
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        }
+        .nav-link:hover {
+            color: #ff00f0;
+            text-shadow: 0 0 10px #ff00f0;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+        /* Accessibility class to hide text visually but keep it for screen readers */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-gray-900/80 backdrop-blur z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <a href="#" class="text-xl font-bold gradient-text">Nebulous Holdings</a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#services" class="nav-link text-gray-300 hover:text-white transition">Services</a>
+                    <a href="#operations" class="nav-link text-gray-300 hover:text-white transition">Operations</a>
+                    <a href="#about" class="nav-link text-gray-300 hover:text-white transition">About</a>
+                </div>
+                <div class="md:hidden">
+                    <!-- A11Y FIX: Added ARIA attributes for accessibility -->
+                    <button id="menu-btn" class="text-gray-300 hover:text-white p-2" aria-expanded="false" aria-controls="mobile-menu">
+                        <span class="sr-only">Open menu</span>
+                        <i data-feather="menu"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden fixed inset-0 bg-gray-900/95 z-40 pt-20 px-4">
+        <div class="flex flex-col space-y-6 text-center">
+            <a href="#services" class="nav-link-mobile text-xl text-gray-300 hover:text-white transition py-2">Services</a>
+            <a href="#operations" class="nav-link-mobile text-xl text-gray-300 hover:text-white transition py-2">Operations</a>
+            <a href="#about" class="nav-link-mobile text-xl text-gray-300 hover:text-white transition py-2">About</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div id="vanta-globe" class="absolute inset-0"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-20">
+            <div class="text-center" data-aos="fade-up" data-aos-duration="1000">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 font-['Orbitron'] tracking-tight">
+                    <span class="gradient-text">Institutional Grade</span> Validator Operations
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-10">
+                    Nebulous Holdings builds, secures, and scales non-custodial validator infrastructure exclusively for <a href="https://pulsechain.com" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-purple-400 transition-colors underline">Pulse Chain</a>, ensuring your assets are managed with unmatched safety, reliability, and transparency.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#services" class="px-8 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full font-bold hover:shadow-lg hover:shadow-cyan-500/30 transition-all tracking-wider">
+                        Explore Services
+                    </a>
+                    <a href="#contact" class="px-8 py-3 border border-cyan-400 rounded-full font-bold hover:bg-cyan-900/30 hover:shadow-lg hover:shadow-cyan-500/10 transition-all tracking-wider">
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section class="py-20 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Boutique Digital Infrastructure</h2>
+                <p class="text-xl text-gray-300 max-w-4xl mx-auto">
+                    Nebulous Holdings LLC is a boutique digital-infrastructure company focused on high-availability validator operations and on-chain reliability engineering. We combine disciplined systems design, rigorous security practices, and automation-first operations to deliver uptime, slashing resistance, and clean, auditable performance for long-horizon digital-asset strategies.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">What We Do</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Comprehensive validator services designed for institutional reliability
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="feature-card bg-gray-900/80 backdrop-blur-sm rounded-xl p-8 transition-all duration-300 border border-gray-800 hover:border-cyan-400/30" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-blue-400 mb-4">
+                        <i data-feather="shield" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Validator Operations</h3>
+                    <p class="text-gray-300">
+                        Design, deploy, and maintain execution & consensus clients on hardened bare-metal. Target high uptime and low missed-attestation rates while minimizing slashing risk.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-gray-800 rounded-xl p-8 transition duration-300" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-purple-400 mb-4">
+                        <i data-feather="activity" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Observability & Automation</h3>
+                    <p class="text-gray-300">
+                        End-to-end telemetry with Prometheus/Grafana, alerting pipelines, health checks, and Ansible-based builds for consistent, repeatable fleet management.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-gray-800 rounded-xl p-8 transition duration-300" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-green-400 mb-4">
+                        <i data-feather="repeat" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Resilience Engineering</h3>
+                    <p class="text-gray-300">
+                        Rolling upgrades, blue/green cutovers, image pinning, configuration drift control, and disaster-recovery runbooks.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-gray-800 rounded-xl p-8 transition duration-300" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-yellow-400 mb-4">
+                        <i data-feather="key" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Key Management</h3>
+                    <p class="text-gray-300">
+                        Offline key generation, sealed-secret workflows, role-based access, and strict least-privilege network segmentation.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-gray-800 rounded-xl p-8 transition duration-300" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-red-400 mb-4">
+                        <i data-feather="trending-up" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Capacity Planning</h3>
+                    <p class="text-gray-300">
+                        Cost/yield modeling, server sizing, and scale-out roadmaps that prioritize reliability over headline throughput.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-gray-800 rounded-xl p-8 transition duration-300" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-indigo-400 mb-4">
+                        <i data-feather="server" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Current Footprint</h3>
+                    <p class="text-gray-300">
+                        Live validators on PulseChain with a near-term scale plan toward 100+ nodes, staged across multiple data-center regions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Operations Section -->
+    <section id="operations" class="py-20 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">How We Run</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    The Nebulous way: disciplined, automated, and resilient
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-8">
+                    <div class="bg-gray-700/50 p-6 rounded-lg" data-aos="fade-right">
+                        <h3 class="text-xl font-bold mb-3 text-blue-400">Hardened Stack</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Ubuntu LTS, containerized clients</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Minimal host surface, signed/verified artifacts</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Firewall policies that default-deny</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-700/50 p-6 rounded-lg" data-aos="fade-right" data-aos-delay="100">
+                        <h3 class="text-xl font-bold mb-3 text-purple-400">Network Posture</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Private mesh overlay for admin (e.g., WireGuard/Tailscale)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Locked management planes</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Audited bastion patterns</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-700/50 p-6 rounded-lg" data-aos="fade-right" data-aos-delay="200">
+                        <h3 class="text-xl font-bold mb-3 text-green-400">Change Control</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>IaC-driven deployments, versioned configs</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Maintenance windows and rollback plans</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Tested in staging before production</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="space-y-8">
+                    <div class="bg-gray-700/50 p-6 rounded-lg" data-aos="fade-left">
+                        <h3 class="text-xl font-bold mb-3 text-yellow-400">Observability</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Per-validator dashboards</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>SLA/SLO tracking, log retention</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Post-incident reviews with corrective actions</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-700/50 p-6 rounded-lg" data-aos="fade-left" data-aos-delay="100">
+                        <h3 class="text-xl font-bold mb-3 text-red-400">Recovery</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Documented RPO/RTO targets</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Snapshot strategies, redundant bootstraps</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Practice restores (not just backups)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-700/50 p-6 rounded-lg" data-aos="fade-left" data-aos-delay="200">
+                        <h3 class="text-xl font-bold mb-3 text-indigo-400">Security & Compliance</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Hardware isolation for keys, MFA everywhere</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Non-custodial by design</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-feather="check" class="w-5 h-5 mr-2 mt-0.5 text-green-400"></i>
+                                <span>Quarterly credential rotation</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Principles Section -->
+    <section class="py-20 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Principles We Live By</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="feature-card bg-gray-900/80 border border-gray-800 rounded-xl p-8 text-center hover:border-cyan-400/30 transition-all" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-blue-400 mb-4 mx-auto w-16 h-16 bg-blue-400/10 rounded-full flex items-center justify-center">
+                        <i data-feather="target" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Discipline</h3>
+                    <p class="text-gray-300">
+                        Procedure over improvisation; repeatable wins beat lucky spikes.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-gray-800 rounded-xl p-8 text-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-purple-400 mb-4 mx-auto w-16 h-16 bg-purple-400/10 rounded-full flex items-center justify-center">
+                        <i data-feather="eye" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Integrity</h3>
+                    <p class="text-gray-300">
+                        Transparent metrics, clear change histories, and no "black boxes."
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-gray-800 rounded-xl p-8 text-center" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-green-400 mb-4 mx-auto w-16 h-16 bg-green-400/10 rounded-full flex items-center justify-center">
+                        <i data-feather="shield" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Resilience</h3>
+                    <p class="text-gray-300">
+                        Assume failure; design graceful degradation and fast recovery.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-gray-800 rounded-xl p-8 text-center" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-yellow-400 mb-4 mx-auto w-16 h-16 bg-yellow-400/10 rounded-full flex items-center justify-center">
+                        <i data-feather="lock" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Sovereignty</h3>
+                    <p class="text-gray-300">
+                        Keep control paths minimal, legible, and in your hands.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2" data-aos="fade-right">
+                    <!-- PERFORMANCE FIX: Added lazy loading and a more descriptive alt tag -->
+                    <img src="https://primary.jwwb.nl/public/p/f/e/temp-zxnezuilrvwloxnpbflc/hvicqi/pulsechain.jpg" alt="Abstract visualization of the PulseChain network with interconnected nodes" class="rounded-xl w-full border border-cyan-400/50 shadow-lg shadow-cyan-500/20" loading="lazy" decoding="async">
+                </div>
+                <div class="lg:w-1/2" data-aos="fade-left">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">About Nebulous</h2>
+                    <div class="space-y-6 text-gray-300">
+                        <p>
+                            <strong>Operator DNA:</strong> We're not chasing buzzwords; we ship clean builds, strong monitoring, and boring reliability.
+                        </p>
+                        <p>
+                            <strong>Security first:</strong> Key hygiene, least-privilege access, and audit-friendly workflows from day one.
+                        </p>
+                        <p>
+                            <strong>Automation everywhere:</strong> Fewer manual steps, fewer mistakes, faster recovery.
+                        </p>
+                        <p>
+                            <strong>Scale on purpose:</strong> Growth guided by telemetry and risk thresholds—not by hype.
+                        </p>
+                    </div>
+                    
+                    <div class="mt-12">
+                        <h3 class="text-2xl font-bold mb-4">Founder</h3>
+                        <div class="flex items-center gap-4">
+                            <!-- TODO: Replace this div with an <img src="/path/to/eric-photo.jpg" alt="Headshot of Eric C." class="w-16 h-16 rounded-full"> for better personalization -->
+                            <div class="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center">
+                                <i data-feather="user" class="w-8 h-8 text-gray-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Eric C. -Spartan_126</h4>
+                                <p class="text-gray-400">Special Operations Communicator and cybersecurity leader</p>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-gray-300">
+                            Having dedicated over two decades to providing top-tier C5ISR (Command, Control, Communications, Computers, Combat Systems, and Intelligence, Surveillance, and Reconnaissance) to elite special operations forces and Joint Interagency Task Force (JIATF) partners worldwide, Eric now applies his specialized discipline and expertise to the world of crypto.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="py-20 bg-gradient-to-r from-blue-900/80 to-purple-900/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Why Choose Nebulous Holdings?</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-10">
+                    Experience institutional-grade validator operations with the security, reliability, and transparency your digital assets deserve.
+                </p>
+                <a href="mailto:contact@nebulousholdings.com" class="inline-block px-8 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full font-bold hover:shadow-lg hover:shadow-cyan-500/30 transition-all tracking-wider">
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-gray-900 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <a href="#" class="text-xl font-bold gradient-text">Nebulous Holdings LLC</a>
+                </div>
+                <!-- CONTENT FIX: Replaced placeholder links with examples and added accessibility text -->
+                <div class="flex space-x-6">
+                    <a href="https://twitter.com/YourHandle" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition">
+                        <span class="sr-only">Twitter</span>
+                        <i data-feather="twitter"></i>
+                    </a>
+                    <a href="https://github.com/YourHandle" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition">
+                        <span class="sr-only">GitHub</span>
+                        <i data-feather="github"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/YourHandle" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition">
+                        <span class="sr-only">LinkedIn</span>
+                        <i data-feather="linkedin"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-800 text-center md:text-left">
+                <p class="text-sm text-gray-500">
+                    Nebulous Holdings LLC operates infrastructure and provides technical operations. Nothing on this page constitutes financial, investment, or tax advice. Digital assets are volatile and involve risk; do your own research.
+                </p>
+                <!-- CONTENT FIX: Updated copyright year to be dynamic -->
+                <p class="text-sm text-gray-500 mt-2">
+                    &copy; <span id="copyright-year">2025</span> Nebulous Holdings LLC. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Animations on Scroll
+        AOS.init();
+
+        // Replace feather icons
+        feather.replace();
+        
+        // Mobile menu toggle logic
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileNavLinks = document.querySelectorAll('.nav-link-mobile');
+        
+        const toggleMenu = () => {
+            const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
+            mobileMenu.classList.toggle('hidden');
+            // A11Y FIX: Toggle aria-expanded state for screen readers
+            menuBtn.setAttribute('aria-expanded', !isExpanded);
+        };
+
+        menuBtn.addEventListener('click', toggleMenu);
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+        
+        // Dynamically update copyright year
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+        
+        // Initialize Vanta.js globe animation
+        // Ensure Vanta is initialized after the element is loaded
+        document.addEventListener('DOMContentLoaded', (event) => {
+            VANTA.GLOBE({
+                el: "#vanta-globe",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                color: 0xff00f0,
+                backgroundColor: 0x000000,
+                size: 1.00,
+                points: 10.00,
+                maxDistance: 20.00
+            });
+        });
+    </script>
+</body>
+</html>
+
